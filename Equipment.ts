@@ -1,6 +1,5 @@
 import { clamp } from './util'
 
-
 const MAX_ARMOR = 100;
 
 export interface Weapon {
@@ -15,7 +14,6 @@ export class MeleeWeapon implements Weapon {
   }
   damage: number;
   length: number;
-
 }
 
 export class Equipment {

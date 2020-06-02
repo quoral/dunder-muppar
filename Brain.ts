@@ -1,9 +1,8 @@
-import GameState from './GameState';
+import { SubjectiveGameState } from './GameState';
 import Action from './Action';
 
 interface Brain {
-  name: string,
-  step: (gameState: GameState) => Action
+  step: (gameState: SubjectiveGameState) => Action
 }
 
 export default Brain;
