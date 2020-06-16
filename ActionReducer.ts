@@ -1,16 +1,22 @@
-import GameState from './GameState'
-import Action from './Action'
-import * as actionTypes from './actionTypes'
+import GameState from './GameState';
+import Action from './Action';
+import * as actionTypes from './actionTypes';
 import { lengthV2, normalizeV2, addV2 } from './util';
 
-interface ActionReducer{
-  reduce(state: GameState, playerId: number, action: Action): GameState
+interface ActionReducer {
+  reduce(state: GameState, playerId: number, action: Action): GameState;
 }
 
-const replaceAt = (idx: number, arr: any[], obj: any) => arr.map((el, i) => i === idx ? obj : el);
+const replaceAt = (idx: number, arr: any[], obj: any) =>
+  arr.map((el, i) => (i === idx ? obj : el));
 
 const reducer: ActionReducer = {
-  reduce(state: GameState, playerId: number, action: Action): GameState {
+  reduce(prevState: GameState, playerId: number, action: Action): GameState {
+    const state = {
+      ...prevState,
+      playerTurn: (prevState.playerTurn + 1) % prevState.players.length,
+    };
+    console.log(state.playerTurn);
     let player = state.players[playerId];
     switch (action.type) {
       case actionTypes.MOVE: {
@@ -30,10 +36,11 @@ const reducer: ActionReducer = {
             position: addV2(player.position, dp),
           }),
         };
-      };
-      default: return state;
+      }
+      default:
+        return state;
     }
-  }
+  },
 };
 
 export default reducer;

@@ -1,6 +1,7 @@
 import Brain from './Brain';
 
 import GameState, { subjectify, initialize } from './GameState';
+import ConsoleRenderer from './ConsoleRenderer';
 import Renderer from './Renderer';
 import actionReducer from './ActionReducer';
 import Judge, { FairJudge } from './Judge';
@@ -18,10 +19,10 @@ class Game {
   private started = false;
   private ended: boolean = false;
 
-  constructor(brains: Brain[]) {
+  constructor(brains: Brain[], debug: boolean = false) {
     this.gameState = initialize(brains);
     this.stateHistory = [this.gameState];
-    this.renderer = new Renderer();
+    this.renderer = new ConsoleRenderer(debug);
     this.judge = new FairJudge();
     this.brains = brains;
   }
@@ -30,7 +31,7 @@ class Game {
     if (this.started) return;
     this.started = true;
     while (!this.ended) {
-      await sleep(500);
+      await sleep(50);
       this.step();
     }
   }

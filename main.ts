@@ -30,9 +30,11 @@ import Brain from './Brain';
 */
 
 function main() {
-  const brains: Brain[] = ['A', 'B', 'C', 'D'].map(letter => new StupidBrain(letter));
+  const brains: Brain[] = ['A', 'B', 'C', 'D'].map(
+    (letter) => new StupidBrain(letter)
+  );
 
-  const game = new Game(brains);
+  const game = new Game(brains, process.argv.includes('debug'));
   game.start();
 }
 
