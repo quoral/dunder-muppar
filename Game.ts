@@ -1,13 +1,15 @@
 import Brain from './Brain';
-import GameState, { subjectify } from './GameState';
+
+import GameState, { subjectify, initialize } from './GameState';
 import Renderer from './Renderer';
 import actionReducer from './ActionReducer';
 import Judge, { FairJudge } from './Judge';
 
-import { V2 } from './util';
+import { sleep, V2 } from './util';
 
 class Game {
   private brains: Brain[];
+  private stateHistory: GameState[];
   private gameState: GameState;
   private judge: Judge;
 
@@ -16,16 +18,19 @@ class Game {
   private started = false;
   private ended: boolean = false;
 
-  constructor(gameState: GameState) {
-    this.gameState = gameState;
+  constructor(brains: Brain[]) {
+    this.gameState = initialize(brains);
+    this.stateHistory = [this.gameState];
     this.renderer = new Renderer();
     this.judge = new FairJudge();
+    this.brains = brains;
   }
 
-  public start() {
+  public async start() {
     if (this.started) return;
     this.started = true;
     while (!this.ended) {
+      await sleep(500);
       this.step();
     }
   }
@@ -49,7 +54,14 @@ class Game {
     const newState = actionReducer.reduce(this.gameState, turn, action);
 
     const gameOver = this.judge.isGameOver(newState);
-    const stale = this.judge.isStale(this.gameState, newState);
+
+    const oldStateIndex = this.stateHistory.length - this.brains.length;
+    let stale = false;
+    if (oldStateIndex >= 0) {
+      const oldState = this.stateHistory[oldStateIndex];
+      stale = this.judge.isStale(oldState, newState);
+    }
+    this.stateHistory.push(newState);
 
     this.renderer.render(newState);
     this.ended = stale || gameOver;

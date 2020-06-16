@@ -17,6 +17,16 @@ export const normalizeV2 = (v: V2, toLength: number = 1) => {
   const multiplier = toLength / len;
   return { x: v.x * multiplier, y: v.y * multiplier };
 };
+export const equalsV2 = (v: V2, w: V2) => {
+  return v.x === w.x && v.y === w.y;
+};
 export const addV2 = (v: V2, w: V2) => {
   return { x: v.x + w.x, y: v.y + w.y };
 };
+
+export async function sleep(duration) {
+  return new Promise(resolve => setTimeout(resolve, duration));
+}
+
+// usage:
+// await sleep(1000);

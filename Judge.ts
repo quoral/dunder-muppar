@@ -8,16 +8,37 @@ interface Judge {
 
 export class FairJudge implements Judge {
   isStale(prevState: GameState, nextState: GameState) {
-    return false;
+    const playersMoved = prevState.players.some((prev, idx) => {
+      const next = nextState.players[idx];
+
+      return prev.position.x == next.position.x && 
+             prev.position.y == next.position.y;
+    });
+    if (playersMoved) return false;
+    return true;
   }
+
+  getAlivePlayers(state: GameState) {
+    return state.players.filter(player => {
+      return player.health > 0;
+    });
+  }
+  
   isGameOver(state: GameState) {
-    return false;
+    return this.getAlivePlayers(state).length <= 1;
   }
+
   getResult(state: GameState) {
     if (!this.isGameOver(state)) {
       return null;
     }
-    return 'Winner: Tomas';
+
+    const alivePlayers = this.getAlivePlayers(state);
+    if (alivePlayers.length === 1) {
+      return `Winner: ${alivePlayers[0].name}`;
+    }
+
+    return `Draw! Players alive: ${alivePlayers.map(player => player.name).join(', ')}`;
   }
 }
 

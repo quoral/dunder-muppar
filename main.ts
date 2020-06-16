@@ -1,8 +1,8 @@
 import Renderer from './Renderer';
 import Game from './Game';
-import { initialize } from './GameState';
 import Player from './Player';
-import stupidBrain from './StupidBrain';
+import StupidBrain from './StupidBrain';
+import Brain from './Brain';
 
 /*
   type GameState
@@ -30,43 +30,9 @@ import stupidBrain from './StupidBrain';
 */
 
 function main() {
-  const BOARD_SIZE = 20;
+  const brains: Brain[] = ['A', 'B', 'C', 'D'].map(letter => new StupidBrain(letter));
 
-  let players = [
-    {
-      name: 'Inho',
-      position: { x: 0, y: 0 },
-      health: 100,
-      size: 1,
-      equipment: null,
-    },
-    {
-      name: 'Kölle',
-      position: { x: BOARD_SIZE / 2, y: BOARD_SIZE / 2 },
-      health: 100,
-      size: 1,
-      equipment: null,
-    },
-    {
-      name: 'Jumpern',
-      position: { x: 0, y: BOARD_SIZE },
-      health: 100,
-      size: 1,
-      equipment: null,
-    },
-    {
-      name: 'Trump',
-      position: { x: BOARD_SIZE, y: BOARD_SIZE },
-      health: 100,
-      size: 1,
-      equipment: null,
-    },
-  ];
-
-  let gameState = initialize();
-  gameState.players = players;
-
-  const game = new Game(gameState);
+  const game = new Game(brains);
   game.start();
 }
 
