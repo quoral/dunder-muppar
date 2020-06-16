@@ -2,13 +2,14 @@ import Brain from './Brain';
 import GameState, { subjectify } from './GameState';
 import Renderer from './Renderer';
 import actionReducer from './ActionReducer';
-import judge from './Judge';
+import Judge, { FairJudge } from './Judge';
 
 import { V2 } from './util';
 
 class Game {
   private brains: Brain[];
   private gameState: GameState;
+  private judge: Judge;
 
   private renderer: Renderer;
 
@@ -18,9 +19,12 @@ class Game {
   constructor(gameState: GameState) {
     this.gameState = gameState;
     this.renderer = new Renderer();
+    this.judge = new FairJudge();
   }
 
-  private run() {
+  public start() {
+    if (this.started) return;
+    this.started = true;
     while (!this.ended) {
       this.step();
     }
@@ -44,15 +48,13 @@ class Game {
     const action = brain.step(subjectiveState);
     const newState = actionReducer.reduce(this.gameState, turn, action);
 
-    const gameOver = judge.isGameOver(newState);
-    const stale = judge.isStale(this.gameState, newState);
+    const gameOver = this.judge.isGameOver(newState);
+    const stale = this.judge.isStale(this.gameState, newState);
 
     this.renderer.render(newState);
     this.ended = stale || gameOver;
     this.gameState = newState;
   }
 }
-
-
 
 export default Game;

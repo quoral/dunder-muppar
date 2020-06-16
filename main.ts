@@ -32,15 +32,39 @@ import stupidBrain from './StupidBrain';
 function main() {
   const BOARD_SIZE = 20;
 
-  let players =[
-    {name: "Inho", position: {x: 0, y: 0}, health: 100, size: 1, equipment: null},
-    {name: "Kölle", position: {x: BOARD_SIZE / 2, y: BOARD_SIZE / 2}, health: 100, size: 1, equipment: null},
-    {name: "Jumpern", position: {x: 0, y: BOARD_SIZE}, health: 100, size: 1, equipment: null},
-    {name: "Trump", position: {x: BOARD_SIZE, y: BOARD_SIZE}, health: 100, size: 1, equipment: null}
+  let players = [
+    {
+      name: 'Inho',
+      position: { x: 0, y: 0 },
+      health: 100,
+      size: 1,
+      equipment: null,
+    },
+    {
+      name: 'Kölle',
+      position: { x: BOARD_SIZE / 2, y: BOARD_SIZE / 2 },
+      health: 100,
+      size: 1,
+      equipment: null,
+    },
+    {
+      name: 'Jumpern',
+      position: { x: 0, y: BOARD_SIZE },
+      health: 100,
+      size: 1,
+      equipment: null,
+    },
+    {
+      name: 'Trump',
+      position: { x: BOARD_SIZE, y: BOARD_SIZE },
+      health: 100,
+      size: 1,
+      equipment: null,
+    },
   ];
 
-  let gameState = initialize()
-  gameState.players = players
+  let gameState = initialize();
+  gameState.players = players;
 
   const game = new Game(gameState);
   game.start();
