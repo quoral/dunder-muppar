@@ -1,6 +1,4 @@
-import Renderer from './Renderer';
 import Game from './Game';
-import Player from './Player';
 import StupidBrain from './StupidBrain';
 import Brain from './Brain';
 

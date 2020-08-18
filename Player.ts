@@ -1,13 +1,14 @@
-import { V2 } from './util';
+import { Segment } from './util';
 import { Equipment } from './Equipment';
 
 export type Player = {
   id: number;
   name: string;
-  position: V2;
-  health: number;
+  segments: Segment[];
   equipment: Equipment | null;
   size: number;
+  alive: boolean;
+  killedBy?: string;
 };
 
 export default Player;

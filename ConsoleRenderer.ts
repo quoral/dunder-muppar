@@ -18,7 +18,9 @@ class ConsoleRenderer implements Renderer {
 
   constructor(debug: boolean) {
     this.logger = debug ? logPrint : logReprint;
-    clearConsole();
+    if (!debug) {
+      clearConsole();
+    }
   }
 
   render(state: GameState) {
@@ -34,17 +36,25 @@ class ConsoleRenderer implements Renderer {
     }
 
     for (const player of state.players) {
-      const y = Math.floor(player.position.y);
-      const x = Math.floor(player.position.x);
-      board[y][x] = colorstring(
-        defaultColors[player.id],
-        player.name.charAt(0)
-      );
+      for (const segment of player.segments) {
+        const y = Math.floor(segment.p0.y);
+        const x = Math.floor(segment.p0.x);
+        board[y][x] = colorstring(
+          defaultColors[player.id],
+          player.name.charAt(0)
+        );
+      }
     }
 
+    this.logger(`*${'-'.repeat(width)}*`, board.length);
     board
       .map((c) => c.join(''))
-      .forEach((line, lineNumber) => this.logger(line, lineNumber));
+      .forEach((line, lineNumber) => this.logger(`|${line}|`, lineNumber));
+    this.logger(`*${'-'.repeat(width)}*`, board.length);
+  }
+
+  finalize(result: String) {
+    console.log(result);
   }
 }
 

@@ -1,9 +1,9 @@
 import Brain from './Brain';
 
 import GameState, { subjectify, initialize } from './GameState';
-import ConsoleRenderer from './ConsoleRenderer';
+import GifRenderer from './GifRenderer';
 import Renderer from './Renderer';
-import actionReducer from './ActionReducer';
+import reducer from './Reducer';
 import Judge, { FairJudge } from './Judge';
 
 import { sleep, V2 } from './util';
@@ -22,7 +22,7 @@ class Game {
   constructor(brains: Brain[], debug: boolean = false) {
     this.gameState = initialize(brains);
     this.stateHistory = [this.gameState];
-    this.renderer = new ConsoleRenderer(debug);
+    this.renderer = new GifRenderer(debug);
     this.judge = new FairJudge();
     this.brains = brains;
   }
@@ -34,6 +34,7 @@ class Game {
       await sleep(50);
       this.step();
     }
+    this.renderer.finalize(this.judge.getResult(this.gameState));
   }
 
   private step() {
@@ -52,7 +53,7 @@ class Game {
     const subjectiveState = subjectify(this.gameState, turn);
     const brain = this.brains[turn];
     const action = brain.step(subjectiveState);
-    const newState = actionReducer.reduce(this.gameState, turn, action);
+    const newState = reducer.reduce(this.gameState, action);
 
     const gameOver = this.judge.isGameOver(newState);
 

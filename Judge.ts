@@ -10,9 +10,7 @@ export class FairJudge implements Judge {
   isStale(prevState: GameState, nextState: GameState) {
     const playersMoved = prevState.players.some((prev, idx) => {
       const next = nextState.players[idx];
-      return (
-        prev.position.x != next.position.x || prev.position.y != next.position.y
-      );
+      return prev.segments.length != next.segments.length;
     });
     if (playersMoved) {
       return false;
@@ -21,9 +19,7 @@ export class FairJudge implements Judge {
   }
 
   getAlivePlayers(state: GameState) {
-    return state.players.filter((player) => {
-      return player.health > 0;
-    });
+    return state.players.filter((player) => player.alive);
   }
 
   isGameOver(state: GameState) {
