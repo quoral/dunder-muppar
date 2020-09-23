@@ -54,7 +54,9 @@ class Game {
     const turn = this.gameState.playerTurn;
     const subjectiveState = subjectify(this.gameState, turn);
     const brain = this.brains[turn];
-    const action = brain.step(subjectiveState);
+    const action = this.gameState.players[turn].alive
+      ? brain.step(subjectiveState)
+      : null;
     const newState = reducer.reduce(this.gameState, action);
 
     const gameOver = this.judge.isGameOver(newState);

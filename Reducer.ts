@@ -34,6 +34,8 @@ const replaceAt = (idx: number, arr: any[], obj: any) =>
 const handleTurn: Reducer = {
   reduce(state: GameState, action: Action): GameState {
     const player = state.players[state.playerTurn];
+    if (!player.alive) return state;
+    if (!action?.type) return state;
     switch (action.type) {
       case actionTypes.TURN_CLOCKWISE:
       case actionTypes.TURN_COUNTERCLOCKWISE:
