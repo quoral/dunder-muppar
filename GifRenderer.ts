@@ -1,10 +1,11 @@
-import GameState from './GameState';
-import Renderer from './Renderer';
-
 import * as GIFEncoder from 'gif-encoder-2';
 import { createCanvas } from 'canvas';
+import { performance } from 'perf_hooks';
 import { writeFile } from 'fs';
 import * as path from 'path';
+
+import GameState from './GameState';
+import Renderer from './Renderer';
 
 const defaultColors = [
   '#ff0000',
@@ -60,8 +61,13 @@ class GifRenderer implements Renderer {
     const encoder = new GIFEncoder(width, height);
     encoder.setDelay(0);
     encoder.start();
-
-    for (const state of this.history) {
+    console.time('RenderTotal');
+    for (
+      let i = 0;
+      i < this.history.length;
+      i += 4 * this.history[i].players.length
+    ) {
+      const state = this.history[i];
       encoder.addFrame(ctx);
       ctx.fillStyle = '#000000';
       ctx.fillRect(0, 0, width, height);
@@ -83,10 +89,14 @@ class GifRenderer implements Renderer {
     encoder.finish();
 
     const buffer = encoder.out.getData();
-
-    console.log('writing gif');
     writeFile(path.join(__dirname, 'beginner.gif'), buffer, (error) => {
-      console.log('error writing gif', error);
+      if (error) {
+        console.log('error writing gif', error);
+      } else {
+        console.log('gif rendering successful');
+      }
+      let t1 = performance.now();
+      console.timeEnd('RenderTotal');
     });
   }
 }

@@ -45,8 +45,8 @@ const handleTurn: Reducer = {
         );
         const turn =
           {
-            [actionTypes.TURN_CLOCKWISE]: -state.constants.maxTurnSpeed,
-            [actionTypes.TURN_COUNTERCLOCKWISE]: state.constants.maxTurnSpeed,
+            [actionTypes.TURN_CLOCKWISE]: state.constants.maxTurnSpeed,
+            [actionTypes.TURN_COUNTERCLOCKWISE]: -state.constants.maxTurnSpeed,
           }[action.type] || 0; // TODO: Adjust based powerups etc.
         const newDirection = rotateV2(currentDirection, turn);
         const nosePosition = lastSegment.p1;

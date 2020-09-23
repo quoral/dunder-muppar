@@ -1,6 +1,14 @@
 import Game from './Game';
-import StupidBrain from './StupidBrain';
 import Brain from './Brain';
+import {
+  EdgeBrain,
+  InhoBrain,
+  SwedishBrain,
+  WorkplaceBrain,
+  ZBrain,
+  BunBrain,
+  SBrain,
+} from './brains';
 
 /*
   type GameState
@@ -28,9 +36,15 @@ import Brain from './Brain';
 */
 
 function main() {
-  const brains: Brain[] = ['A', 'B', 'C', 'D'].map(
-    (letter) => new StupidBrain(letter)
-  );
+  const brains: Brain[] = [
+    new EdgeBrain('E'),
+    new InhoBrain('I'),
+    new SwedishBrain('S'),
+    new WorkplaceBrain('W'),
+    new ZBrain('Z'),
+    new BunBrain('B'),
+    new SBrain('S'),
+  ];
 
   const game = new Game(brains, process.argv.includes('debug'));
   game.start();

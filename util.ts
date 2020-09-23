@@ -24,6 +24,9 @@ export const normalizeV2 = (v: V2, toLength: number = 1) => {
   const multiplier = toLength / len;
   return { x: v.x * multiplier, y: v.y * multiplier };
 };
+export const multiplyV2 = (v: V2, multiplier: number) => {
+  return { x: v.x * multiplier, y: v.y * multiplier };
+};
 export const equalsV2 = (v: V2, w: V2) => {
   return v.x === w.x && v.y === w.y;
 };

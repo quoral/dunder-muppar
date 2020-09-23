@@ -1,5 +1,5 @@
 import Player from './Player';
-import { V2, Segment, addV2, normalizeV2 } from './util';
+import { V2, Segment, addV2, normalizeV2, subtractV2 } from './util';
 import Brain from './Brain';
 
 type Constants = {
@@ -53,25 +53,44 @@ const createSegment = (position: V2, direction: V2): Segment => ({
   p1: addV2(position, normalizeV2(direction, epsilon)),
 });
 
-const createPlayers = (brains: Brain[]): Player[] => {
-  return brains.map((brain, idx) => ({
-    id: idx,
-    name: brain.getName() || `Bot ${idx}`,
-    segments: [createSegment({ x: 20 * idx, y: 0 }, { x: 1, y: 1 })],
-    alive: true,
-    size: 1,
-    equipment: null,
-  }));
+const createPlayers = (brains: Brain[], boardSize: V2): Player[] => {
+  const { x: maxX, y: maxY } = boardSize;
+  return brains.map((brain, idx) => {
+    let p0: V2 = {
+      x: Math.random(),
+      y: Math.random(),
+    };
+    p0 = {
+      x: p0.x > 0.5 ? p0.x * 0.4 : 1 - (1 - p0.x) * 0.4,
+      y: p0.y > 0.5 ? p0.y * 0.4 : 1 - (1 - p0.y) * 0.4,
+    };
+    p0 = {
+      x: p0.x * maxX,
+      y: p0.y * maxY,
+    };
+    const p1: V2 = subtractV2({ x: maxX / 2, y: maxY / 2 }, p0);
+    return {
+      id: idx,
+      name: brain.getName() || `Bot ${idx}`,
+      segments: [createSegment(p0, p1)],
+      alive: true,
+      size: 1,
+      equipment: null,
+    };
+  });
 };
 
-export const initialize = (brains: Brain[]): GameState => ({
-  constants: {
-    maxSpeed: 1,
-    boardSize: { x: 100, y: 100 },
-    maxTurnSpeed: 1,
-  },
-  playerTurn: 0,
-  players: createPlayers(brains),
-});
+export const initialize = (brains: Brain[]): GameState => {
+  const boardSize = { x: 600, y: 600 };
+  return {
+    constants: {
+      maxSpeed: 1,
+      boardSize,
+      maxTurnSpeed: 2,
+    },
+    playerTurn: 0,
+    players: createPlayers(brains, boardSize),
+  };
+};
 
 export default GameState;

@@ -30,10 +30,12 @@ class Game {
   public async start() {
     if (this.started) return;
     this.started = true;
+    console.time('steps');
     while (!this.ended) {
-      await sleep(50);
+      // await sleep(50);
       this.step();
     }
+    console.timeEnd('steps');
     this.renderer.finalize(this.judge.getResult(this.gameState));
   }
 
