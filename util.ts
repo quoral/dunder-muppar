@@ -14,7 +14,7 @@ export const dist = (p0: V2, p1: V2): number =>
 export const clamp = (x: number, min: number, max: number) =>
   Math.max(min, Math.min(x, max));
 
-export const length2V2 = (v: V2) => v.x * v.x + v.y * v.y;
+export const length2V2 = (v: V2) => dotV2(v, v);
 export const lengthV2 = (v: V2): number => Math.sqrt(length2V2(v));
 export const normalizeV2 = (v: V2, toLength: number = 1) => {
   // TODO: https://en.wikipedia.org/wiki/Fast_inverse_square_root
